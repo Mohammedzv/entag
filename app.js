@@ -147,7 +147,7 @@ function renderUsers(root){
     const payload={email:d.email.trim(),password:d.password,displayName:d.displayName.trim(),role:d.role,permissions,lineIds:[...form.elements.lineIds.selectedOptions].map(o=>o.value)};
     const submit=form.querySelector('button[type="submit"]');setBusy(submit,true);
     try{const result=await createManagedUser(payload);toast("تم إنشاء حساب "+(result.data.email||payload.email)+" بنجاح");form.reset();form.elements.role.dispatchEvent(new Event("change"));}
-    catch(err){toast("تعذر إنشاء المستخدم: "+(err.message||"تحقق من نشر Cloud Functions"));}
+    catch(err){console.error("createManagedUser failed",{code:err.code,message:err.message,details:err.details});toast("تعذر إنشاء المستخدم: "+(err.message||err.code||"تحقق من نشر Cloud Functions"));}
     finally{setBusy(submit,false);}
   };
   note.append(form);root.append(note);
